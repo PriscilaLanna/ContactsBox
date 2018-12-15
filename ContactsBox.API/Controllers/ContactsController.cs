@@ -26,10 +26,12 @@ namespace ContactsBox.API.Controllers
         }
 
         // GET: api/Contacts/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("contact/{id}")]
+        public Contact Get(int id)
         {
-            return "value";
+            var contact = _contactService.GetById(id);
+
+            return contact;
         }
 
         // POST: api/Contacts

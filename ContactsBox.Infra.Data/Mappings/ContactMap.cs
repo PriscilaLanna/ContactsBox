@@ -12,6 +12,7 @@ namespace ContactsBox.Infra.Data.Mappings
             Map(x => x.Name);
             Map(x => x.Company);
             Map(x => x.Address);
+            Map(x => x.Ativo);
         }
     }
 }

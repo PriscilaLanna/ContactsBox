@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ContactsBox.Domain\ContactsBox.Domain.csproj" />
+    <ProjectReference Include="..\ContactsBox.Infra.CrossCuttting\ContactsBox.Infra.CrossCuttting.csproj" />
   </ItemGroup>
 
 </Project>

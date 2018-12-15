@@ -79,11 +79,5 @@ namespace ContactsBox.Infra.Data.Repositories
                 session.Update(obj);
             }
         }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
