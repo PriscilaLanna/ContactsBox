@@ -4,6 +4,12 @@ namespace ContactsBox.Domain.Entities
 {
     public class Contact
     {
+        public Contact()
+        {
+            Telephones = new List<Telephone>();
+            Emails = new List<Email>();
+        }
+
         public virtual int Id { get; set; }
         public virtual string Name { get; set; }
         public virtual string Company { get; set; }

@@ -31,11 +31,27 @@ namespace ContactsBox.Infra.Data.Repositories
         }
 
         public IEnumerable<Contact> Get()
-        {
+        {          
             using (var session = _context.OpenSession())
             {
-                return session.Query<Contact>().Where(x => x.Ativo).ToList();
+                using (var tran = session.BeginTransaction())
+                {
+                    var contacts = session.Query<Contact>()
+                        .Where(x => x.Ativo)
+                        .FetchMany(x => x.Telephones)
+                        .ToFuture();
+
+                    session.Query<Contact>()
+                        .Where(x => x.Ativo)
+                        .FetchMany(x => x.Emails)
+                        .ToFuture();
+
+                    tran.Commit();
+
+                    return contacts.ToList();
+                }
             }
+            
         }
 
         public IEnumerable<Contact> GetAll(Expression<Func<Contact, bool>> predicate, params Expression<Func<Contact, Object>>[] includes)

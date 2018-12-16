@@ -21,12 +21,12 @@ namespace ContactsBox.API.Controllers
         public IEnumerable<Contact> Get()
         {
             var contact = _contactService.Get();
-                       
+
             return contact;
         }
 
         // GET: api/Contacts/5
-        [HttpGet("contact/{id}")]
+        [HttpGet("{id}")]       
         public Contact Get(int id)
         {
             var contact = _contactService.GetById(id);

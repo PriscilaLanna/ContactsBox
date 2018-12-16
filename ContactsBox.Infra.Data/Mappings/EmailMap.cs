@@ -12,6 +12,7 @@ namespace ContactsBox.Infra.Data.Mappings
             Map(x => x.ContactId);
             Map(x => x.EmailAddress);
             Map(x => x.TypeId);
+            References(x => x.Contact).Cascade.All().LazyLoad().Column("ContactId");
         }
     }
 }
