@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace ContactsBox.Domain.Entities
-{
+{   
     public class Contact
     {
         public Contact()

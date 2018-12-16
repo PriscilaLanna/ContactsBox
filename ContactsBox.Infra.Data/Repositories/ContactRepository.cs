@@ -75,9 +75,22 @@ namespace ContactsBox.Infra.Data.Repositories
         {
             using (var session = _context.OpenSession())
             {
-                return session.Query<Contact>()
-                    .Where(x => x.Id == Id)
-                    .FirstOrDefault();
+                using (var tran = session.BeginTransaction())
+                {
+                    var contacts = session.Query<Contact>()
+                        .Where(x => x.Ativo && x.Id == Id)
+                        .FetchMany(x => x.Telephones)
+                        .ToFuture();
+
+                    session.Query<Contact>()
+                        //.Where(x => x.Ativo)
+                        .FetchMany(x => x.Emails)
+                        .ToFuture();
+
+                    tran.Commit();
+
+                    return contacts.FirstOrDefault();
+                }
             }
         }
 

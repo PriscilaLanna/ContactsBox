@@ -16,16 +16,15 @@ namespace ContactsBox.API.Controllers
             _contactService = contactService;
         }
 
-        // GET: api/Contacts
+        // GET: Retorna todos contatos ativos
         [HttpGet]      
         public IEnumerable<Contact> Get()
         {
             var contact = _contactService.Get();
-
             return contact;
         }
 
-        // GET: api/Contacts/5
+        // GET: Retorna o contato pelo id
         [HttpGet("{id}")]       
         public Contact Get(int id)
         {
@@ -34,22 +33,25 @@ namespace ContactsBox.API.Controllers
             return contact;
         }
 
-        // POST: api/Contacts
+        // POST: Cadastra um contato
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Contact contact)
         {
+            _contactService.Save(contact);
         }
 
-        // PUT: api/Contacts/5
+        // PUT: Atualiza o contato
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Contact contact)
         {
+            _contactService.Update(contact);
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
+        // DELETE: Desativa o contato
+        [HttpDelete("DeleteContact/{id}")]
         public void Delete(int id)
         {
+            _contactService.Delete(id);
         }
     }
 }
