@@ -2,7 +2,6 @@
 using ContactsBox.Domain.Interfaces.Repository;
 using ContactsBox.Infra.Data.Context;
 using NHibernate.Linq;
-using NHibernate.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;

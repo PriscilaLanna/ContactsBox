@@ -3,7 +3,6 @@ using System.Net.Http;
 using ContactsBox.Domain.Entities;
 using ContactsBox.Domain.Interfaces.Service;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace ContactsBox.API.Controllers
 {
