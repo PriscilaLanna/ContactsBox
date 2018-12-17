@@ -2,6 +2,7 @@
 using ContactsBox.Domain.Interfaces.Repository;
 using ContactsBox.Infra.Data.Context;
 using NHibernate.Linq;
+using NHibernate.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,14 @@ namespace ContactsBox.Infra.Data.Repositories
     public class ContactRepository : IContactRepository
     {
         private readonly INHibernateContext _context;
-        public ContactRepository(INHibernateContext context)
+        private readonly ITelephoneRepository _telephoneRepository;
+        private readonly IEmailRepository _emailRepository;
+
+        public ContactRepository(INHibernateContext context, ITelephoneRepository telephoneRepository, IEmailRepository emailRepository)
         {
             _context = context;
+            _telephoneRepository = telephoneRepository;
+            _telephoneRepository = telephoneRepository;
         }
 
         public void Delete(int Id)
@@ -25,6 +31,13 @@ namespace ContactsBox.Infra.Data.Repositories
                 if (contact != null)
                 {
                     contact.Ativo = false;
+
+                    using (var transaction = session.BeginTransaction())
+                    {
+                        session.Save(contact);
+                        transaction.Commit();
+                    }
+                   
                     session.Update(contact);
                 }
             }
@@ -98,7 +111,12 @@ namespace ContactsBox.Infra.Data.Repositories
         {
             using (var session = _context.OpenSession())
             {
-                session.Save(obj);
+                using (var transaction = session.BeginTransaction())
+                {
+                  
+                    session.Persist(obj);
+                    transaction.Commit();
+                }
             }
         }
 
@@ -106,7 +124,52 @@ namespace ContactsBox.Infra.Data.Repositories
         {
             using (var session = _context.OpenSession())
             {
-                session.Update(obj);
+                var contact = session.Get<Contact>(obj.Id);
+
+                if (contact != null)
+                {
+                    using (var transaction = session.BeginTransaction())
+                    {
+                        //Contact
+                        contact.Name = obj.Name;
+                        contact.Company = obj.Company;
+                        contact.Address = obj.Address;
+
+                        session.Save(contact);
+
+                        //Add Telephones
+                        foreach (var item in obj.Telephones)
+                        {                            
+                            if (!contact.Telephones.Contains(item))                            
+                                _telephoneRepository.Save(item);                              
+                        }
+
+                        //Delete Telephones
+                        foreach (var item in contact.Telephones)
+                        {                            
+                            if (!obj.Telephones.Contains(item))                            
+                                _telephoneRepository.Delete(item.Id);
+                        }
+
+                        //Add Emails
+                        foreach (var item in obj.Emails)
+                        {
+                            if (!contact.Emails.Contains(item))
+                                _emailRepository.Save(item);
+                        }
+
+                        //Delete Emails
+                        foreach (var item in contact.Emails)
+                        {
+                            if (!obj.Emails.Contains(item))
+                                _emailRepository.Delete(item.Id);
+                        }
+
+                        transaction.Commit();
+                    }
+
+                    session.Update(contact);
+                }
             }
         }        
     }

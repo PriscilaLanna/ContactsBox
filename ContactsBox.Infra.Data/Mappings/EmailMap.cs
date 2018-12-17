@@ -8,11 +8,12 @@ namespace ContactsBox.Infra.Data.Mappings
         public EmailMap()
         {
             Table("Email");
-            Id(x => x.Id );
+            Id(x => x.Id ).GeneratedBy.Identity();
             Map(x => x.ContactId);
             Map(x => x.EmailAddress);
             Map(x => x.TypeId);
-            References(x => x.Contact).Cascade.All().LazyLoad().Column("ContactId");
+            //References(x => x.Contact).Column("ContactId").ForeignKey("ContactId");
+            //References(x => x.Contact).Column("ContactId");  //luiz
         }
     }
 }

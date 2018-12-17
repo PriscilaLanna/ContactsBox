@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using ContactsBox.Domain.Entities;
 using ContactsBox.Domain.Interfaces.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,11 @@ namespace ContactsBox.API.Controllers
         }
 
         // GET: Retorna todos contatos ativos
-        [HttpGet]      
+        /// <summary>
+        /// Retorna todos contatos ativos
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public IEnumerable<Contact> Get()
         {
             var contact = _contactService.Get();
@@ -25,7 +30,12 @@ namespace ContactsBox.API.Controllers
         }
 
         // GET: Retorna o contato pelo id
-        [HttpGet("{id}")]       
+        /// <summary>
+        /// Retorna o contato pelo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
         public Contact Get(int id)
         {
             var contact = _contactService.GetById(id);
@@ -34,24 +44,74 @@ namespace ContactsBox.API.Controllers
         }
 
         // POST: Cadastra um contato
+        /// <summary>
+        /// Cadastra um contato
+        /// </summary>
+        /// <param name="contact"></param>
         [HttpPost]
-        public void Post([FromBody] Contact contact)
+        public HttpResponseMessage Post([FromBody] Contact contact)
         {
-            _contactService.Save(contact);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _contactService.Save(contact);
+                    return new HttpResponseMessage(System.Net.HttpStatusCode.Created);
+                }
+                catch (System.Exception ex)
+                {
+                    return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+                }
+            }
+            else
+            {
+                return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            }
         }
 
         // PUT: Atualiza o contato
+        /// <summary>
+        /// Atualiza o contato
+        /// </summary>       
+        /// <param name="contact"></param>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Contact contact)
+        public HttpResponseMessage Put([FromBody] Contact contact)
         {
-            _contactService.Update(contact);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _contactService.Update(contact);
+                    return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+                }
+                catch (System.Exception ex)
+                {
+                    return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+                }
+            }
+            else
+            {
+                return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            }
         }
 
         // DELETE: Desativa o contato
-        [HttpDelete("DeleteContact/{id}")]
-        public void Delete(int id)
+        /// <summary>
+        /// Desativa o contato
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpDelete("{id}")]
+        public HttpResponseMessage Delete(int id)
         {
-            _contactService.Delete(id);
+            try
+            {
+                _contactService.Delete(id);
+                return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            }
+            catch (System.Exception ex)
+            {
+                return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
