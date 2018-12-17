@@ -14,32 +14,26 @@
             @Html.DisplayNameFor(model => model.Id)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Id)
+            <input type="text" class="form-control" id="usr" asp-for="Id">
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            <input type="text" class="form-control" id="Name" asp-for="Name" placeholder="Nome">
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Company)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Company)
+            <input type="text" class="form-control" id="Company" asp-for="Company" placeholder="Empresa">
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Address)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Ativo)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Ativo)
-        </dd>
+            <input type="text" class="form-control" id="Endereco" asp-for="Address" placeholder="Endereço">
+        </dd>      
     </dl>
     <div class="panel">
         <div class="panel-body">
@@ -47,8 +41,18 @@
             {
                 <p>Telefone:</p>
                 <label>telephone.Number</label>
+                <input type="text" class="form-control" id="Endereco" asp-for="@telephone.Number" placeholder="Telefone">
                 <p>Classificação:</p>
                 <label>telephone.Number</label>
+                <select multiple class="form-control" id="sel2">
+                    <option>Celular</option>
+                    <option>Casa</option>
+                    <option>Trabalho</option>
+                    <option>Principal</option>
+                    <option>Fax do Trabalho</option>
+                    <option>Fax de Casa</option>
+                    <option>Outro</option>
+                </select>
             }
         </div>
     </div>
@@ -58,8 +62,16 @@
             {
                 <p>Email:</p>
                 <label>email.Number</label>
+                <input type="text" class="form-control" id="Endereco" asp-for="@email.EmailAddress" placeholder="Email">
+
                 <p>Classificação:</p>
                 <label>email.Type</label>
+                <select multiple class="form-control" id="sel2">                   
+                    <option>Casa</option>
+                    <option>Trabalho</option>
+                    <option>Principal</option>                    
+                    <option>Outro</option>
+                </select>
             }
         </div>
     </div>
