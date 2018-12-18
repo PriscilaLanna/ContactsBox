@@ -20,7 +20,7 @@ namespace ContactsBox.Infra.Data.Repositories
         {
             _context = context;
             _telephoneRepository = telephoneRepository;
-            _telephoneRepository = telephoneRepository;
+            _emailRepository = emailRepository;
         }
 
         public void Delete(int Id)
@@ -37,14 +37,14 @@ namespace ContactsBox.Infra.Data.Repositories
                         session.Save(contact);
                         transaction.Commit();
                     }
-                   
+
                     session.Update(contact);
                 }
             }
         }
 
         public IEnumerable<Contact> Get()
-        {          
+        {
             using (var session = _context.OpenSession())
             {
                 using (var tran = session.BeginTransaction())
@@ -64,7 +64,7 @@ namespace ContactsBox.Infra.Data.Repositories
                     return contacts.ToList().OrderBy(x => x.Name);
                 }
             }
-            
+
         }
 
         public IEnumerable<Contact> GetAll(Expression<Func<Contact, bool>> predicate, params Expression<Func<Contact, Object>>[] includes)
@@ -110,64 +110,40 @@ namespace ContactsBox.Infra.Data.Repositories
         public void Save(Contact contact)
         {
             using (var session = _context.OpenSession())
-            {
-                using (var transaction = session.BeginTransaction())
+            {              
+                try
                 {
-                    //String hql = "INSERT INTO Contacts (Name, Company, Address, Ativo)";
-                    //var query = session.CreateQuery(hql);
-                    //query.SetParameter("Name", contact.Name);
-                    //query.SetParameter("Company", contact.Company);
-                    //query.SetParameter("Address", contact.Address);
-                    //query.SetParameter("Ativo", true);
-
-                    //int result = query.ExecuteUpdate();
-
-                    //foreach (var telephone in contact.Telephones)
-                    //{
-                    //    String hql2 = "INSERT INTO Telephone Values(:ContactId, :Number, :TypeId)";
-                    //    var queryTelephone = session.CreateQuery(hql2);
-                    //    queryTelephone.SetParameter("ContactId", telephone.ContactId);
-                    //    queryTelephone.SetParameter("Number", telephone.Number);
-                    //    queryTelephone.SetParameter("TypeId", telephone.TypeId);                     
-
-                    //    queryTelephone.ExecuteUpdate();
-                    //}
-
-                    //foreach (var email in contact.Emails)
-                    //{
-                    //    String hql3 = "INSERT INTO Email Values(:ContactId, :EmailAddress, :TypeId)";
-                    //    var queryEmail = session.CreateQuery(hql3);
-                    //    queryEmail.SetParameter("ContactId", email.ContactId);
-                    //    queryEmail.SetParameter("EmailAddress", email.EmailAddress);
-                    //    queryEmail.SetParameter("TypeId", email.TypeId);
-
-                    //    queryEmail.ExecuteUpdate();
-                    //}
-
-                    try
+                    var contactAux = new Contact
                     {
-                        session.Save(contact);
-                    }
-                    catch(Exception ex)
+                        Name = contact.Name,
+                        Company = contact.Company,
+                        Address = contact.Address,
+                        Ativo = contact.Ativo
+                    };
+
+                    session.Save(contactAux);
+
+                    using (var transaction = session.BeginTransaction())
                     {
-                        if (ex.Message.Contains("INSERT INTO Telephone (ContactId, Number, TypeId) VALUES (?, ?, ?); select SCOPE_IDENTITY()]"))
+                        foreach (var item in contact.Telephones)
                         {
-                            foreach (var telephone in contact.Telephones)
-                            {
-                                telephone.ContactId = contact.Id;
-                                _telephoneRepository.Save(telephone);
-                            }
-
-                            foreach (var email in contact.Emails)
-                            {
-                                email.ContactId = contact.Id;
-                                _emailRepository.Save(email);
-                            }
+                            item.ContactId = contactAux.Id;
+                            _telephoneRepository.Save(item);
                         }
-                        else throw;
-                    }
 
-                    transaction.Commit();
+                        foreach (var item in contact.Emails)
+                        {
+                            item.ContactId = contactAux.Id;
+                            _emailRepository.Save(item);
+                        }
+
+                        transaction.Commit();
+
+                    }
+                }
+                catch (Exception ex)
+                {
+
                 }
             }
         }
@@ -191,39 +167,39 @@ namespace ContactsBox.Infra.Data.Repositories
 
                         //Add Telephones
                         foreach (var item in obj.Telephones)
-                        {                            
-                            if (!contact.Telephones.Contains(item))                            
-                                _telephoneRepository.Save(item);                              
+                        {
+                            if (!contact.Telephones.Any(x => x.Number == item.Number))
+                            {
+                                _telephoneRepository.Save(item);
+                            }
                         }
 
                         //Delete Telephones
                         foreach (var item in contact.Telephones)
-                        {                            
-                            if (!obj.Telephones.Contains(item))                            
+                        {
+                            if (!obj.Telephones.Any(x => x.Number == item.Number))
                                 _telephoneRepository.Delete(item.Id);
                         }
 
                         //Add Emails
                         foreach (var item in obj.Emails)
                         {
-                            if (!contact.Emails.Contains(item))
+                            if (!contact.Emails.Any(x => x.EmailAddress == item.EmailAddress))
                                 _emailRepository.Save(item);
                         }
 
                         //Delete Emails
                         foreach (var item in contact.Emails)
                         {
-                            if (!obj.Emails.Contains(item))
+                            if (!obj.Emails.Any(x => x.EmailAddress == item.EmailAddress))
                                 _emailRepository.Delete(item.Id);
                         }
 
                         transaction.Commit();
-                    }
-
-                    session.Update(contact);
+                    }                  
                 }
             }
-        }        
+        }
     }
 }
 

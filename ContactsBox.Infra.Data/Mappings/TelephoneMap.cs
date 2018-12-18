@@ -8,17 +8,10 @@ namespace ContactsBox.Infra.Data.Mappings
         public TelephoneMap()
         {
             Table("Telephone");
-            Id(x => x.Id).GeneratedBy.Identity();
+            Id(x => x.Id);
             Map(x => x.ContactId);
             Map(x => x.Number);
-            Map(x => x.TypeId);
-            //CompositeId()
-            //.KeyReference(x => x.Id, "Id")
-            //.KeyProperty(x => x.ContactId, "ContactId");
-         //  References(x => x.Contact).Column("Id").Not.Nullable();
-
-            //References(x => x.Contact).Column("ContactId"); //luiz
-
+            Map(x => x.TypeId);     
         }
     }
 }

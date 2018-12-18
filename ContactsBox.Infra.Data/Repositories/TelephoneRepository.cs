@@ -21,10 +21,11 @@ namespace ContactsBox.Infra.Data.Repositories
         {
             using (var session = _context.OpenSession())
             {
-                var email = session.Get<Telephone>(Id);
-                if (email != null)
+                var telephone = session.Get<Telephone>(Id);
+                if (telephone != null)
                 {
-                    session.Delete(email);
+                    session.Delete(telephone);
+                    session.Flush();
                 }
             }
         }       
@@ -76,7 +77,7 @@ namespace ContactsBox.Infra.Data.Repositories
         {
             using (var session = _context.OpenSession())
             {
-                session.Update(obj);
+                session.Save(obj);
             }
         }
     }

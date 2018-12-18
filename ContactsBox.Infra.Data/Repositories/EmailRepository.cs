@@ -25,6 +25,7 @@ namespace ContactsBox.Infra.Data.Repositories
                 if (email != null)
                 {                   
                     session.Delete(email);
+                    session.Flush();
                 }
             }
         }       
@@ -76,7 +77,7 @@ namespace ContactsBox.Infra.Data.Repositories
         {
             using (var session = _context.OpenSession())
             {
-                session.Update(obj);
+                session.Save(obj);
             }
         }     
     }

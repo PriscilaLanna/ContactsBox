@@ -74,7 +74,7 @@ namespace ContactsBox.API.Controllers
         /// Atualiza o contato
         /// </summary>       
         /// <param name="contact"></param>
-        [HttpPut("{id}")]
+        [HttpPut]
         public HttpResponseMessage Put([FromBody] Contact contact)
         {
             if (ModelState.IsValid)
