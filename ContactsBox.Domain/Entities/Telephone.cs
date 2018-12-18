@@ -7,6 +7,6 @@
         public virtual string Number { get; set; }
         public virtual int TypeId { get; set; }
 
-        public virtual Contact Contact { get; set; }
+        //public virtual Contact Contact { get; set; }
     }
 }

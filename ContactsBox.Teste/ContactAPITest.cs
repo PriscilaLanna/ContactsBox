@@ -2,6 +2,7 @@ using ContactsBox.API.Controllers;
 using ContactsBox.Domain.Entities;
 using ContactsBox.Domain.Interfaces.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,27 +11,16 @@ namespace ContactsBox.Teste
     [TestClass]
     public class ContactAPITest
     {
-        private readonly IContactService _contactService;
-
-        public ContactAPITest(IContactService contactService)
-        {
-            _contactService = _contactService;
-        }
-
-        [TestMethod]
-        public void Add()
-        {
-        }
-
-        [TestMethod]
-        public void Update()
-        {
-        }
+        Mock<IContactService> _mock;
+        ContactsController _target;
 
         [TestMethod]
         public void GetAll()
         {
-            var data = new List<Contact>
+            _mock = new Mock<IContactService>();
+            _target = new ContactsController(_mock.Object);
+
+            var contacts = new List<Contact>
             {
                 new Contact { Id=1, Name = "Contact A", Ativo=true ,
                     Telephones = new List<Telephone>{  new Telephone{ Id=1, ContactId=1, Number="11987446845",TypeId=1 } },
@@ -43,13 +33,13 @@ namespace ContactsBox.Teste
                     Emails = new List<Email>{ new Email { Id=1, ContactId=3, EmailAddress="contactc@teste.com" } } },
             }.AsQueryable();
 
+            _mock.Setup(x => x.Get()).Returns(contacts);
+            var obtido = _target.Get();
 
-            var service = new ContactsController(_contactService);
-            var Contacts = service.Get();
-                       
-            Assert.AreEqual(2, Contacts.Count());
-            Assert.AreEqual("Contact A", Contacts.ToArray()[0].Name);
-            Assert.AreEqual("Contact C", Contacts.ToArray()[1].Name);
+            Assert.AreEqual(2, obtido.Count());
+            Assert.AreEqual("Contact A", obtido.ToArray()[0].Name);
+            Assert.AreEqual("Contact C", obtido.ToArray()[1].Name);
+
         }
 
         [TestMethod]

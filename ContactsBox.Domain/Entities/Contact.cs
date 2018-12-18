@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ContactsBox.Domain.Entities
 {   
@@ -9,8 +10,9 @@ namespace ContactsBox.Domain.Entities
             Telephones = new List<Telephone>();
             Emails = new List<Email>();
         }
-
+             
         public virtual int Id { get; set; }
+        [Required]
         public virtual string Name { get; set; }
         public virtual string Company { get; set; }
         public virtual string Address { get; set; }

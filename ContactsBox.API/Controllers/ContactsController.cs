@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using ContactsBox.Domain.Entities;
 using ContactsBox.Domain.Interfaces.Service;
@@ -57,9 +58,9 @@ namespace ContactsBox.API.Controllers
                     _contactService.Save(contact);
                     return new HttpResponseMessage(System.Net.HttpStatusCode.Created);
                 }
-                catch (System.Exception ex)
-                {
-                    return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+                catch (Exception ex)
+                {                    
+                        return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
                 }
             }
             else

@@ -2,6 +2,7 @@
 using ContactsBox.Domain.Interfaces.Repository;
 using ContactsBox.Infra.Data.Context;
 using NHibernate.Linq;
+using NHibernate.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +61,7 @@ namespace ContactsBox.Infra.Data.Repositories
 
                     tran.Commit();
 
-                    return contacts.ToList();
+                    return contacts.ToList().OrderBy(x => x.Name);
                 }
             }
             
@@ -79,7 +80,7 @@ namespace ContactsBox.Infra.Data.Repositories
                         query = query.Fetch(fetchPath);
                     }
                 }
-                return query.ToList();
+                return query.ToList().OrderBy(x => x.Name);
             }
         }
 
@@ -106,14 +107,66 @@ namespace ContactsBox.Infra.Data.Repositories
             }
         }
 
-        public void Save(Contact obj)
+        public void Save(Contact contact)
         {
             using (var session = _context.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
-                  
-                    session.Persist(obj);
+                    //String hql = "INSERT INTO Contacts (Name, Company, Address, Ativo)";
+                    //var query = session.CreateQuery(hql);
+                    //query.SetParameter("Name", contact.Name);
+                    //query.SetParameter("Company", contact.Company);
+                    //query.SetParameter("Address", contact.Address);
+                    //query.SetParameter("Ativo", true);
+
+                    //int result = query.ExecuteUpdate();
+
+                    //foreach (var telephone in contact.Telephones)
+                    //{
+                    //    String hql2 = "INSERT INTO Telephone Values(:ContactId, :Number, :TypeId)";
+                    //    var queryTelephone = session.CreateQuery(hql2);
+                    //    queryTelephone.SetParameter("ContactId", telephone.ContactId);
+                    //    queryTelephone.SetParameter("Number", telephone.Number);
+                    //    queryTelephone.SetParameter("TypeId", telephone.TypeId);                     
+
+                    //    queryTelephone.ExecuteUpdate();
+                    //}
+
+                    //foreach (var email in contact.Emails)
+                    //{
+                    //    String hql3 = "INSERT INTO Email Values(:ContactId, :EmailAddress, :TypeId)";
+                    //    var queryEmail = session.CreateQuery(hql3);
+                    //    queryEmail.SetParameter("ContactId", email.ContactId);
+                    //    queryEmail.SetParameter("EmailAddress", email.EmailAddress);
+                    //    queryEmail.SetParameter("TypeId", email.TypeId);
+
+                    //    queryEmail.ExecuteUpdate();
+                    //}
+
+                    try
+                    {
+                        session.Save(contact);
+                    }
+                    catch(Exception ex)
+                    {
+                        if (ex.Message.Contains("INSERT INTO Telephone (ContactId, Number, TypeId) VALUES (?, ?, ?); select SCOPE_IDENTITY()]"))
+                        {
+                            foreach (var telephone in contact.Telephones)
+                            {
+                                telephone.ContactId = contact.Id;
+                                _telephoneRepository.Save(telephone);
+                            }
+
+                            foreach (var email in contact.Emails)
+                            {
+                                email.ContactId = contact.Id;
+                                _emailRepository.Save(email);
+                            }
+                        }
+                        else throw;
+                    }
+
                     transaction.Commit();
                 }
             }
