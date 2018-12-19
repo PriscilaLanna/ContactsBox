@@ -9,44 +9,250 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
+    <title>Alterar Contato</title>
 </head>
 <body>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <hr />
+    <div class="row">
+
+        <form asp-action="Save">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" disabled/>
-                <span asp-validation-for="Id" class="text-danger"></span>
+            <div class="col-md-12">
+                <div class="col-md-6">
+                        <input type="hidden" asp-for="@Model.Id"  />
+                      
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Company" class="control-label"></label>
+                        <input asp-for="Company" class="form-control" />
+                        <span asp-validation-for="Company" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    @for (int i = 0; i < Model.Telephones.Count; i++)
+
+                    {
+                        <div class="row" id="row_@i">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="control-label">Telefone</label>
+                                    <input type="hidden" asp-for="@Model.Telephones[i].Id" />
+                                    <input type="hidden" asp-for="@Model.Telephones[i].ContactId" />
+                                    <input type="hidden" asp-for="@Model.Telephones[i].Type" />
+                                    <input type="hidden" asp-for="@Model.Telephones[i].TypeId" />
+                                    <input type="text" asp-for="@Model.Telephones[i].Number" class="form-control" />
+                                    <span asp-validation-for="@Model.Telephones[i].Number" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="control-label">Tipo</label>
+                                <select class="form-control" id="sel1">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-1">
+                                <label class="control-label"></label>
+                                <a class="btn btn-lg plus-remove"
+                                   data-id="@Model.Telephones[i].Id"
+                                   data-contactid="@Model.Telephones[i].ContactId"
+                                   data-typeid="@Model.Telephones[i].TypeId"
+                                   data-type="@Model.Telephones[i].Type"
+                                   data-number="@Model.Telephones[i].Number"
+                                   data-index="@i"><span class="glyphicon glyphicon-remove alert-danger"></span></a>
+                            </div>
+                        </div>
+                    }
+                    @{
+                        int count = Model.Telephones.Count == 0 ? 0 : Model.Telephones.Count + 1;
+                        int countEmails = Model.Emails.Count == 0 ? 0 : Model.Emails.Count + 1;
+                    }
+                    <div class="row" id="row_@(count)">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label">Telefone</label>
+                                <input class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="control-label">Tipo</label>
+                            <select class="form-control" id="sel1">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label"></label>
+                            <a class="btn btn-lg plus-add" data-id="0"><span class="glyphicon glyphicon-plus-sign alert-success"></span></a>
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+                    @for (int i = 0; i < Model.Emails.Count; i++)
+                    {
+                        <div class="row" id="row_email_@i">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="control-label">Email</label>
+
+                                    <input type="hidden" asp-for="@Model.Emails[i].Id" />
+                                    <input type="hidden" asp-for="@Model.Emails[i].ContactId" />
+                                    <input type="hidden" asp-for="@Model.Emails[i].Type" />
+                                    <input type="hidden" asp-for="@Model.Emails[i].TypeId" />
+                                    <input type="text" asp-for="@Model.Emails[i].EmailAddress" class="form-control" />
+                                    <span asp-validation-for="@Model.Emails[i].EmailAddress" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="control-label">Tipo</label>
+                                <select class="form-control" id="sel1">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-1">
+                                <label class="control-label"></label>
+                                <a class="btn btn-lg plus-remove-email"
+                                   data-id="@Model.Emails[i].Id"
+                                   data-contactid="@Model.Emails[i].ContactId"
+                                   data-typeid="@Model.Emails[i].TypeId"
+                                   data-type="@Model.Emails[i].Type"
+                                   data-number="@Model.Emails[i].EmailAddress"
+                                   data-index="@i"><span class="glyphicon glyphicon-remove alert-danger"></span></a>
+                            </div>
+                        </div>
+                    }
+                    <div class="row" id="row_@(countEmails)">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label">Email</label>
+                                <input class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="control-label">Tipo</label>
+                            <select class="form-control" id="sel1">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label"></label>
+                            <a class="btn btn-lg plus-add-email" data-id="0"><span class="glyphicon glyphicon-plus-sign alert-success"></span></a>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row" id="divTelephonesRemove" style="display:none">
+                    </div>
+                    <div class="row" id="divEmailsRemove" style="display:none">
+
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Company" class="control-label"></label>
-                <input asp-for="Company" class="form-control" />
-                <span asp-validation-for="Company" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>           
-            <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-info" />
-                <a asp-action="Index" class="btn btn-danger">Cancelar</a>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="submit" value="Salvar" class="btn btn-info" />
+                    <a asp-action="Index" class="btn btn-danger">Cancelar</a>
+                </div>
             </div>
         </form>
-    </div>
-</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script>
+            $(document).ready(function () {
+                $('a[class="btn btn-lg plus-remove"]').click(function () {
+                    var index = $(this).data('index');
+                    var id = $(this).data('id');
+                    var contactid = $(this).data('contactid');
+                    var typeid = $(this).data('typeid');
+                    var type = $(this).data('type');
+                    var number = $(this).data('number');
+                    $('#row_' + index).hide();
+                    var telephoneRemoveIndex = 0;
+                    $('#divTelephonesRemove input').each(function (i, index) {
+                        if (this.name.indexOf('.Id') > -1) {
+                            telephoneRemoveIndex += 1;
+                        }
+                    });
+                    var inputId = $('<input class="form-control" value="' + id + '" name="TelephonesRemove[' + telephoneRemoveIndex + '].Id" />');
+                    var inputContactid = $('<input class="form-control" value="' + contactid + '" name="TelephonesRemove[' + telephoneRemoveIndex + '].ContactId" />');
+                    var inputTypeId = $('<input class="form-control" value="' + typeid + '" name="TelephonesRemove[' + telephoneRemoveIndex + '].TypeId" />');
+                    var inputType = $('<input class="form-control" value="' + type + '" name="TelephonesRemove[' + telephoneRemoveIndex + '].Type" />');
+                    var inputNumber = $('<input class="form-control" value="' + number + '" name="TelephonesRemove[' + telephoneRemoveIndex + '].Number" />');
+
+                    $('#divTelephonesRemove').append(inputId);
+                    $('#divTelephonesRemove').append(inputContactid);
+                    $('#divTelephonesRemove').append(inputTypeId);
+                    $('#divTelephonesRemove').append(inputType);
+                    $('#divTelephonesRemove').append(inputNumber);
+                });
+
+                $('a[class="btn btn-lg plus-remove-email"]').click(function () {
+                    var index = $(this).data('index');
+
+                    var id = $(this).data('id');
+                    var contactid = $(this).data('contactid');
+                    var emaileddress = $(this).data('emaileddress');
+                    var typeid = $(this).data('typeid');
+                    var type = $(this).data('type');
+                    $('#row_email_' + index).hide();
+                    var emailRemoveIndex = 0;
+                    $('#divEmailsRemove input').each(function (i, index) {
+                        if (this.name.indexOf('.Id') > -1) {
+                            emailRemoveIndex += 1;
+                        }
+                    });
+                    var inputId = $('<input class="form-control" value="' + id + '" name="EmailsRemove[' + emailRemoveIndex + '].Id" />');
+                    var inputContactid = $('<input class="form-control" value="' + contactid + '" name="EmailsRemove[' + emailRemoveIndex + '].ContactId" />');
+                    var inputTypeId = $('<input class="form-control" value="' + typeid + '" name="EmailsRemove[' + emailRemoveIndex + '].TypeId" />');
+                    var inputType = $('<input class="form-control" value="' + type + '" name="EmailsRemove[' + emailRemoveIndex + '].Type" />');
+                    var inputEmailAddress = $('<input class="form-control" value="' + number + '" name="EmailsRemove[' + emailRemoveIndex + '].EmailAddress" />');
+
+                    $('#divEmailsRemove').append(inputId);
+                    $('#divEmailsRemove').append(inputContactid);
+                    $('#divEmailsRemove').append(inputTypeId);
+                    $('#divEmailsRemove').append(inputType);
+                    $('#divEmailsRemove').append(inputEmailAddress);
+                });
+
+
+                $('a[class="btn btn-lg plus-add"]').click(function () {
+
+                });
+            });
+        </script>
+    }
 </body>
 </html>

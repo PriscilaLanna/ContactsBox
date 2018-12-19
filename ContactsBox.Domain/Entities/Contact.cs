@@ -12,7 +12,7 @@ namespace ContactsBox.Domain.Entities
         }
              
         public virtual int Id { get; set; }
-        [Required]
+        
         public virtual string Name { get; set; }
         public virtual string Company { get; set; }
         public virtual string Address { get; set; }

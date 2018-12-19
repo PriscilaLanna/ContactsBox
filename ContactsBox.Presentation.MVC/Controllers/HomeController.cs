@@ -66,15 +66,17 @@ namespace ContactsBox.Presentation.MVC.Controllers
         {
             try
             {
+
+                var _contact =  Mapper.Map<ContactViewModel, Contact>(contact);
                 using (var client = new HttpClient())
                 {
-                    if (contact.Id > 0)
+                    if (_contact.Id > 0)
                     {
-                        HttpResponseMessage response = client.PutAsJsonAsync($"https://contactsboxapi.azurewebsites.net/api/contacts/", contact).Result;                     
+                        HttpResponseMessage response = client.PutAsJsonAsync($"https://contactsboxapi.azurewebsites.net/api/contacts/", _contact).Result;                     
                     }
                     else
                     {
-                        HttpResponseMessage response = client.PostAsJsonAsync($"https://contactsboxapi.azurewebsites.net/api/contacts/", contact).Result;
+                        HttpResponseMessage response = client.PostAsJsonAsync($"https://contactsboxapi.azurewebsites.net/api/contacts/", _contact).Result;
                     }
                 }
             }

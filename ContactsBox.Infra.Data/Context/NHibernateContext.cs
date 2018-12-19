@@ -18,7 +18,7 @@ namespace ContactsBox.Infra.Data.Context
         public ISession OpenSession()
         {
             ISessionFactory sessionFactory = Fluently.Configure()
-                .Database(MsSqlConfiguration.MsSql2012.ConnectionString(_config.GetSection("ConnectionString:Azure").Value).ShowSql())
+                .Database(MsSqlConfiguration.MsSql2012.ConnectionString(_config.GetSection("ConnectionString:Local").Value).ShowSql())
                 .Mappings(m => m.FluentMappings.AddFromAssembly(Assembly.GetExecutingAssembly()))   
                 .ExposeConfiguration(cfg => new SchemaExport(cfg).Create(false, false))
                 .BuildSessionFactory();
