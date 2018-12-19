@@ -56,11 +56,14 @@
                             </div>
                             <div class="col-md-5">
                                 <label class="control-label">Tipo</label>
-                                <select class="form-control" id="sel1">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
+                                <select class="form-control" id="selTipoTelefoneAdd" >
+                                    <option value="1">Celular</option>
+                                    <option value="2">Casa</option>
+                                    <option value="3">Trabalho</option>
+                                    <option value="4">Principal</option>
+                                    <option value="5">Fax Trabalho</option>
+                                    <option value="6">Fax Casa</option>
+                                    <option value="7">Outro</option>                                  
                                 </select>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
@@ -85,17 +88,20 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label class="control-label">Telefone</label>
-                                <input class="form-control" />
+                                <input id="NovoTelefone" class="form-control" placeholder="Novo Telefone"/>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-5">
                             <label class="control-label">Tipo</label>
-                            <select class="form-control" id="sel1">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
+                            <select class="form-control" id="selTipoTelefone">
+                                <option value="1">Celular</option>
+                                <option value="2">Casa</option>
+                                <option value="3">Trabalho</option>
+                                <option value="4">Principal</option>
+                                <option value="5">Fax Trabalho</option>
+                                <option value="6">Fax Casa</option>
+                                <option value="7">Outro</option>
                             </select>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
@@ -124,11 +130,11 @@
                             </div>
                             <div class="col-md-5">
                                 <label class="control-label">Tipo</label>
-                                <select class="form-control" id="sel1">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
+                                <select class="form-control" id="selTipoEmail">                                    
+                                    <option value="2">Casa</option>
+                                    <option value="3">Trabalho</option>
+                                    <option value="4">Principal</option>                                 
+                                    <option value="7">Outro</option>
                                 </select>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
@@ -148,16 +154,17 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label class="control-label">Email</label>
-                                <input class="form-control" />
+                                <input class="form-control" placeholder="Novo Email"/>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-5">
                             <label class="control-label">Tipo</label>
-                            <select class="form-control" id="sel1">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+                            <select class="form-control" id="selTipoEmailAdd">
+                                <option value="2">Casa</option>
+                                <option value="3">Trabalho</option>
+                                <option value="4">Principal</option>
+                                <option value="7">Outro</option>
                                 <option>4</option>
                             </select>
                             <span asp-validation-for="Name" class="text-danger"></span>
@@ -167,14 +174,12 @@
                             <a class="btn btn-lg plus-add-email" data-id="0"><span class="glyphicon glyphicon-plus-sign alert-success"></span></a>
                         </div>
                     </div>
-
-
-
+                                        
                     <div class="row" id="divTelephonesRemove" style="display:none">
                     </div>
                     <div class="row" id="divEmailsRemove" style="display:none">
-
                     </div>
+
                 </div>
             </div>
             <div class="col-md-12">
@@ -248,9 +253,9 @@
                 });
 
 
-                $('a[class="btn btn-lg plus-add"]').click(function () {
+                $('a[class="btn btn-lg plus-add"]').click(function () {                 
 
-                });
+                                                        });
             });
         </script>
     }
